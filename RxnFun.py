@@ -1,3 +1,36 @@
+#====================================================================== INSTALL PRE-REQS ==================================================================
+! wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.2-Linux-x86_64.sh
+! chmod +x Miniconda3-py37_4.8.2-Linux-x86_64.sh
+! bash ./Miniconda3-py37_4.8.2-Linux-x86_64.sh -b -f -p /usr/local
+! conda install -c rdkit rdkit -y
+import sys
+sys.path.append('/usr/local/lib/python3.7/site-packages/')
+from rdkit import Chem #Hell of an import
+import pandas as pd #Importing panda as "pd"
+from rdkit.Chem import AllChem
+from rdkit.Chem import Draw #Import function to draw molecules
+from itertools import chain
+from rdkit.Chem import rdMolDescriptors
+%matplotlib inline
+import matplotlib.pyplot as plt
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+from keras.optimizers import SGD
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from rdkit import Chem #Hell of an import
+from rdkit.Chem import rdMolDescriptors
+from rdkit import Chem
+from rdkit.Chem import DataStructs
+from rdkit.Chem import RDConfig
+from rdkit import rdBase
+from rdkit.Chem.Draw import IPythonConsole
+from rdkit.Chem.EState import Fingerprinter
+from rdkit.Chem import Descriptors
+
+
+
 #====== FUNCTIONS/SMARTS =================================================================================
 # Splitting Data by Functional Group 
 def FG_split(list, group, keep_group = True):
