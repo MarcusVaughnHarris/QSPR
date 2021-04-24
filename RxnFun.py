@@ -9,11 +9,10 @@ def FG_split(list, group, keep_group = True):
       return HAS_group.mols
     else:
       return DOESNT_HAVE_group.mols
-
 def NHOH_limit(mols, limit_to = 4):
  mol_data = pd.DataFrame({'Mol': mols})
  mol_data["NH_OH_Count"] = [Descriptors.NumHDonors(mol) for mol in mol_data.Mol]
- NH_OH_lim = Nucleophilic_Reactants[Nucleophilic_Reactants.NH_OH_Count <= limit_to]
+ NH_OH_lim = mol_data[mol_data.NH_OH_Count <= limit_to]
  return NH_OH_lim.Mol
 
 #====== RXN FUNCTIONS ====================================================================================
@@ -73,8 +72,10 @@ def Nuc_ring_opening(data, Nucleophiles, return_format):
       all_products_smiles = [Chem.MolToSmiles(mol, isomericSmiles=True) for mol in all_products] #list format
       all_products_unique = [Chem.MolFromSmiles(smiles) for smiles in set(all_products_smiles)] #list format
       return all_products_unique
-    data_ep = FG_split(data, epoxy_smarts, keep_group = True) #Seperating epoxides
-    data_CC5 = FG_split(data, CC5_smarts, keep_group = True) #Seperating CC5's
+
+    data_ep = FG_split(data, Chem.MolFromSmarts('[#6]-1-[#6]-[#8]-1'), keep_group = True) #Seperating epoxides
+    data_CC5 = FG_split(data, Chem.MolFromSmarts('O=[#6]-1-[#8]-[#6]-[#6]-[#8]-1'), keep_group = True) #Seperating CC5's
+
     data_ep = [epoxide_opening(data_ep, n) for n in Nucleophiles] # Reacting epoxides
     data_ep = [x for l in data_ep for x in l] #Unlisting list of lists
     data_ep = [x for x in data_ep if x is not None] #Removing mols that failed sanitization
