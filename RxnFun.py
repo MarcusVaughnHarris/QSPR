@@ -35,9 +35,9 @@ from rdkit.Chem import Descriptors
 # Splitting Data by Functional Group 
 def FG_split(list, group, keep_group = True):
     has_group = [mol.HasSubstructMatch(group) for mol in list]
-    has_group_check = pd.DataFrame({'mols':list,'Group':has_group})
-    HAS_group = pd.DataFrame(has_group_check[has_group_check.Group == 1], columns= ['mols','group'])
-    DOESNT_HAVE_group = pd.DataFrame(has_group_check[has_group_check.Group == 0], columns= ['mols','group'])
+    has_group_check = pandas.DataFrame({'mols':list,'Group':has_group})
+    HAS_group = pandas.DataFrame(has_group_check[has_group_check.Group == 1], columns= ['mols','group'])
+    DOESNT_HAVE_group = pandas.DataFrame(has_group_check[has_group_check.Group == 0], columns= ['mols','group'])
     if keep_group == True:
       return HAS_group.mols
     else:
