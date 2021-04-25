@@ -23,28 +23,32 @@ def PreProcess_SMIdf(SMIdf_descr, property_id, TestSize = 0.25):
   return Desc_train,Desc_test,Prop_train,Prop_test
 
 
+
 #--------- 3. Predict property using defined model and a SMIdf_descr
-def ModelPredict_SMIdf(SMIdf_descr, model): #______________________________________________________GOOD
+def ModelPredict_SMIdf(SMIdf_descr, property_id, model): #______________________________________________________GOOD
   smi_t2_np_array = np.array(list(SMIdf_descr['Descriptors'])) #Convert to Numpy arrays!! (panda cant handle datasets of molecular fingerprints)
   st = StandardScaler()
   smi_t2_np_array_scaled = st.fit_transform(smi_t2_np_array) # Scale array
   smi_t2_predicted_array = model.predict(smi_t2_np_array_scaled) # Predict using
   smi_t2_predicted = [x for l in smi_t2_predicted_array for x in l] #Unlisting list of lists
-  SMIdf_descr["predicted_prop"] = smi_t2_predicted #Adding predicted CMC to original Dataframe
+  
+  predicted_prop_id = "{}{}".format('Predicted_',property_id)
+  
+  SMIdf_descr[predicted_prop_id] = smi_t2_predicted #Adding predicted CMC to original Dataframe
   return SMIdf_descr
 
 
 #--------- 4. Predict prop using SMIdf_descr and show stats for specific functional group subsets in the data
 def Substructure_model_performance(SMIdf_descr, property_id, model, mol_substructure):   #______________________________________________________GOOD
-  cmc_pred = ModelPredict_SMIdf(SMIdf_descr, model ) # Predicting CMC using dataframe
+  cmc_pred = ModelPredict_SMIdf(SMIdf_descr, property_id, model ) # Predicting CMC using dataframe
 
+  predicted_prop_id = "{}{}".format('Predicted_',property_id)
   measured_prop_id = "{}{}".format('Measured_',property_id) 
-  predicted_prop_id = "{}{}".format('Predicted_',property_id) 
 
   model_measured_pred = pd.DataFrame({'smiles': cmc_pred.smiles, # Trimming dataframe to make it easy to see
                                     'Mol': cmc_pred.Mol,  
                                     measured_prop_id: cmc_pred[property_id], 
-                                    predicted_prop_id: cmc_pred['predicted_prop']})
+                                    predicted_prop_id: cmc_pred[predicted_prop_id]})
   model_measured_pred["Percent_Error"] = (abs(model_measured_pred[predicted_prop_id] - model_measured_pred[measured_prop_id])/model_measured_pred[measured_prop_id])*100 # Calc percent Error
   print('Total MAE:' , sum(model_measured_pred.Percent_Error)/len(model_measured_pred), '%') # Printing MAE
 
