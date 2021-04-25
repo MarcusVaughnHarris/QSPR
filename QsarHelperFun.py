@@ -38,6 +38,66 @@ def ModelPredict_SMIdf(SMIdf_descr, property_id, model): #______________________
   return SMIdf_descr
 
 
+
+
+
+
+def Model_performance(SMIdf_descr, property_id, model):   #______________________________________________________GOOD
+  Descriptors_train,  Descriptors_test,  Property_train,  Property_test = PreProcess_SMIdf(SMIdf_descr,      
+                                                                                        property_id = property_id, 
+                                                                                        TestSize = 0.25)
+  
+  predicted_prop_id = "{}{}".format('Predicted_',property_id)
+  measured_prop_id = "{}{}".format('Measured_',property_id) 
+
+
+  #========= PREDICT & PLOT MODEL PERFORMANCE ===============
+  Property_predicted_test = model.predict(Descriptors_test) # Predict Properties using the Descriptors_test set
+  RMS_1 = (np.mean((Property_test.reshape(-1,1) - Property_predicted_test)**2))**0.5 # rms = Root Mean Square Error
+  AE = (abs(Property_test.reshape(-1,1) - Property_predicted_test)/Property_predicted_test)*100# Calc percent Error
+  MAE_1 = np.mean(AE)
+
+  Property_predicted_train = model.predict(Descriptors_train) # Predict Properties using the Descriptors_test set
+  RMS_1_train = (np.mean((Property_train.reshape(-1,1) - Property_predicted_train)**2))**0.5 # rms = Root Mean Square Error
+  AE_train = (abs(Property_train.reshape(-1,1) - Property_predicted_train)/Property_predicted_train)*100# Calc percent Error
+  MAE_1_train = np.mean(AE_train)
+
+
+
+
+
+  plt.scatter(Property_train,  model.predict(Descriptors_train),   label = 'Train',    c='blue') #Plotting training data measured vs predicted
+  plt.scatter(Property_test,  model.predict(Descriptors_test),  c='lightgreen', label='Test', alpha = 0.8) #Adding test data measured vs predicted
+  plt.title('Model Performance (Train and Test Set)')
+  plt.xlabel(measured_prop_id)
+  plt.ylabel(predicted_prop_id)
+  plt.legend(loc=4)
+  plt.show()
+
+  cmc_pred = ModelPredict_SMIdf(SMIdf_descr, property_id, model ) # Predicting CMC using dataframe
+  model_measured_pred = pd.DataFrame({'smiles': cmc_pred.smiles, # Trimming dataframe to make it easy to see
+                                    'Mol': cmc_pred.Mol,  
+                                    measured_prop_id: cmc_pred[property_id], 
+                                    predicted_prop_id: cmc_pred[predicted_prop_id]})
+  model_measured_pred["Percent_Error"] = ((model_measured_pred[predicted_prop_id] - model_measured_pred[measured_prop_id])/model_measured_pred[measured_prop_id])*100 # Calc percent Error
+  RMS = (np.mean(( model_measured_pred[measured_prop_id] - model_measured_pred[predicted_prop_id])**2))**0.5 # rms = Root Mean Square Error
+  Abs_error = ["{}{}".format(i,'% error') for i in [str(mol) for mol in [round(num, 2) for num in list(abs(model_measured_pred['Percent_Error'].values))]]]
+  model_measured_pred['Abs_error'] = Abs_error
+
+  print("MAE (Test):", round(MAE_1, 3), '%')
+  print("MAE (Train):", round(MAE_1_train, 3), '%')
+  print('MAE (Total):' , round(np.mean(model_measured_pred.Percent_Error), 3), '%') # Printing MAE
+
+
+  print("\nRMS (Test):", round(RMS_1, 4))
+  print("RMS (Train):", round(RMS_1_train, 4))
+  print('RMS (Total):', round(RMS, 4))
+  return model_measured_pred
+
+
+
+
+
 #--------- 4. Predict prop using SMIdf_descr and show stats for specific functional group subsets in the data
 def Substructure_model_performance(SMIdf_descr, property_id, model, mol_substructure):   #______________________________________________________GOOD
   cmc_pred = ModelPredict_SMIdf(SMIdf_descr, property_id, model ) # Predicting CMC using dataframe
