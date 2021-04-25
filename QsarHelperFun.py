@@ -35,7 +35,7 @@ def ModelPredict_SMIdf(SMIdf_descr, model): #___________________________________
 
 
 #--------- 4. Predict prop using SMIdf_descr and show stats for specific functional group subsets in the data
-def FG_model_performance(SMIdf_descr, property_id, model, group):   #______________________________________________________GOOD
+def Substructure_model_performance(SMIdf_descr, property_id, model, mol_substructure):   #______________________________________________________GOOD
   cmc_pred = ModelPredict_SMIdf(SMIdf_descr, model ) # Predicting CMC using dataframe
 
   measured_prop_id = "{}{}".format('Measured_',property_id) 
@@ -48,12 +48,13 @@ def FG_model_performance(SMIdf_descr, property_id, model, group):   #___________
   model_measured_pred["Percent_Error"] = (abs(model_measured_pred[predicted_prop_id] - model_measured_pred[measured_prop_id])/model_measured_pred[measured_prop_id])*100 # Calc percent Error
   print('Total MAE:' , sum(model_measured_pred.Percent_Error)/len(model_measured_pred), '%') # Printing MAE
 
-  def FG_subset(df_mols, group):
-    df_mols["Has_FG"] = [mol.HasSubstructMatch(group) for mol in df_mols.Mol]
-    data_with_group = pd.DataFrame(df_mols[df_mols['Has_FG'] == True])
-    return data_with_group
+  def FG_subset(df_mols, mol_substructure):
+    df_mols["Has_FG"] = [mol.HasSubstructMatch(mol_substructure) for mol in df_mols.Mol]
+    data_with_mol_substructure = pd.DataFrame(df_mols[df_mols['Has_FG'] == True])
+    return data_with_mol_substructure
 
-  model_measured_pred_subset= FG_subset(model_measured_pred, group)
-  print('Group MAE:' , sum(model_measured_pred_subset.Percent_Error)/len(model_measured_pred_subset), '%') # Printing MAE
+  model_measured_pred_subset= FG_subset(model_measured_pred, mol_substructure)
+  print('Substructure MAE:' , sum(model_measured_pred_subset.Percent_Error)/len(model_measured_pred_subset), '%') # Printing MAE
   Abs_error = ["{}{}".format(i,'% error') for i in [str(mol) for mol in [round(num, 2) for num in list(model_measured_pred_subset['Percent_Error'].values)]]]
-  return Draw.MolsToGridImage(model_measured_pred_subset.Mol, molsPerRow=8, subImgSize= (250,250), legends = Abs_error)
+  model_measured_pred_subset['Abs_error'] = Abs_error
+  return model_measured_pred_subset
