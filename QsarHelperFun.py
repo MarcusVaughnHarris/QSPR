@@ -55,12 +55,18 @@ def Model_performance(SMIdf_descr, property_id, model):   #_____________________
   Property_predicted_test = model.predict(Descriptors_test) # Predict Properties using the Descriptors_test set
   RMS_1 = (np.mean((Property_test.reshape(-1,1) - Property_predicted_test)**2))**0.5 # rms = Root Mean Square Error
   AE = (abs(Property_test.reshape(-1,1) - Property_predicted_test)/Property_predicted_test)*100# Calc percent Error
+  PE = ((Property_test.reshape(-1,1) - Property_predicted_test)/Property_predicted_test)*100# Calc percent Error
   MAE_1 = np.mean(AE)
+  PE_1 = np.mean(PE)
+
 
   Property_predicted_train = model.predict(Descriptors_train) # Predict Properties using the Descriptors_test set
   RMS_1_train = (np.mean((Property_train.reshape(-1,1) - Property_predicted_train)**2))**0.5 # rms = Root Mean Square Error
   AE_train = (abs(Property_train.reshape(-1,1) - Property_predicted_train)/Property_predicted_train)*100# Calc percent Error
+  PE_train = ((Property_train.reshape(-1,1) - Property_predicted_train)/Property_predicted_train)*100# Calc percent Error
   MAE_1_train = np.mean(AE_train)
+  PE_1_train = np.mean(PE_train)
+
 
 
 
@@ -84,9 +90,14 @@ def Model_performance(SMIdf_descr, property_id, model):   #_____________________
   Abs_error = ["{}{}".format(i,'% error') for i in [str(mol) for mol in [round(num, 2) for num in list(abs(model_measured_pred['Percent_Error'].values))]]]
   model_measured_pred['Abs_error'] = Abs_error
 
-  print("MAE (Test):", round(MAE_1, 3), '%')
+  print('%Error (Test):' , round(PE_1, 3), '%') # Printing MAE
+  print('%Error (Train):' , round(PE_1_train, 3), '%') # Printing MAE
+  print('%Error (Total):' , round(np.mean(model_measured_pred.Percent_Error), 3), '%') # Printing MAE
+
+  print("\nMAE (Test):", round(MAE_1, 3), '%')
   print("MAE (Train):", round(MAE_1_train, 3), '%')
-  print('MAE (Total):' , round(np.mean(model_measured_pred.Percent_Error), 3), '%') # Printing MAE
+  print('MAE (Total):' , round(np.mean(abs(model_measured_pred.Percent_Error)), 3), '%') # Printing MAE
+
 
 
   print("\nRMS (Test):", round(RMS_1, 4))
