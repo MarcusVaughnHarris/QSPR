@@ -1,4 +1,4 @@
-def GraphCNN_preprocess(dataset_file):
+def GraphCNN_preprocess_modelTraining(dataset_file):
   loader = dc.data.CSVLoader(tasks=["cmc_NegativeLogM"],  smiles_field="smiles", featurizer=dc.feat.ConvMolFeaturizer())
   dataset = loader.featurize(dataset_file) # Featurizing the dataset with ConvMolFeaturizer
 
@@ -10,6 +10,12 @@ def GraphCNN_preprocess(dataset_file):
   test = normalizer.transform(valid)
   metric = dc.metrics.Metric(dc.metrics.pearson_r2_score)
   return train, valid, _ 
+
+def GraphCNN_preprocess_modelPredicting(SMIdf):
+  dataset = featurize(SMIdf) # Featurizing the dataset with ConvMolFeaturizer
+  normalizer = dc.trans.NormalizationTransformer(transform_y=True, dataset=dataset, move_mean=True)
+  dataset = normalizer.transform(dataset)
+  return dataset
 
 def GCNN_Model_Performance(train, batchSize):
   cmc_pred = GCNN.predict_on_batch(train.X[:batchSize])
