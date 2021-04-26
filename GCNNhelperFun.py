@@ -35,7 +35,7 @@ def GCNN_Model_Performance(train, batchSize):
   plt.show()
   print(train_scores)
   print(valid_scores)
-  print('Total MAE:' , round(sum(model_measured_pred.Percent_Error)/len(model_measured_pred.Percent_Error),3), '%') # Printing MAE
+  print('Total MAE:' , round(sum(abs(model_measured_pred.Percent_Error))/len(model_measured_pred.Percent_Error),3), '%') # Printing MAE
   return model_measured_pred
 
 
