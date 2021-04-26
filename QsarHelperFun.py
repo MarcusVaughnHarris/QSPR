@@ -42,7 +42,7 @@ def ModelPredict_SMIdf(SMIdf_descr, property_id, model): #______________________
 
 
 
-def Model_performance(SMIdf_descr, property_id, model):   #______________________________________________________GOOD
+def Seq_Model_performance(SMIdf_descr, property_id, model):   #______________________________________________________GOOD
   Descriptors_train,  Descriptors_test,  Property_train,  Property_test = PreProcess_SMIdf(SMIdf_descr,      
                                                                                         property_id = property_id, 
                                                                                         TestSize = 0.25)
