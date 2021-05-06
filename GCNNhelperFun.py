@@ -1,3 +1,4 @@
+#These functions use code from https://towardsdatascience.com/drug-discovery-with-graph-neural-networks-part-1-1011713185eb
 def GCNN_Model_Creator(dataset_file, task_name , smiles_field, epochs, batchSize):
   loader = dc.data.CSVLoader(tasks=[task_name],  smiles_field=smiles_field, featurizer=dc.feat.ConvMolFeaturizer())
   dataset = loader.featurize(dataset_file) # Featurizing the dataset with ConvMolFeaturizer
