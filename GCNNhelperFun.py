@@ -24,15 +24,23 @@ def GCNN_Model_Creator(dataset_file, task_name , smiles_field, epochs, batchSize
   cmc_measured_list= normalizer.untransform(train.y)
   cmc_measured_list = [x for l in cmc_measured_list for x in l]
   
+   measured_prop_id = "{}{}".format('Measured_',task_name)
+   predicted_prop_id = "{}{}".format('Predicted_',task_name)
 
-  model_measured_pred = pd.DataFrame({'smiles': train_smiles,'measured_cmc': cmc_measured_list ,'predicted_cmc': cmc_pred_list})
-  model_measured_pred['measured_cmc'] = round(model_measured_pred.measured_cmc, 3)
-  model_measured_pred['predicted_cmc'] = round(model_measured_pred.predicted_cmc, 3)
+  
+  model_measured_pred = pd.DataFrame({'smiles': train_smiles})
+  model_measured_pred[predicted_prop_id] = cmc_pred_list #Adding predicted CMC to original Dataframe
+  model_measured_pred[measured_prop_id] = cmc_measured_list #Adding measured CMC to original Dataframe
+
+
+  
+  model_measured_pred[measured_prop_id] = round(model_measured_pred[measured_prop_id], 3)
+  model_measured_pred[predicted_prop_id] = round(model_measured_pred[predicted_prop_id], 3)
   model_measured_pred["Percent_Error"] = round(((model_measured_pred.predicted_cmc - model_measured_pred.measured_cmc)/model_measured_pred.measured_cmc)*100, 2) # Calc percent Error
   plt.scatter(model_measured_pred.measured_cmc,  model_measured_pred.predicted_cmc,   label = 'Train',    c='blue') #Plotting training data measured vs predicted
   plt.title('Model Performance (Train and Test Set)')
-  plt.xlabel('measured_cmc')
-  plt.ylabel('predicted_cmc')
+  plt.xlabel(measured_prop_id)
+  plt.ylabel(predicted_prop_id)
   plt.legend(loc=4)
   plt.show()
   print(train_scores)
