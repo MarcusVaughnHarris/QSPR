@@ -24,8 +24,8 @@ def GCNN_Model_Creator(dataset_file, task_name , smiles_field, epochs, batchSize
   cmc_measured_list= normalizer.untransform(train.y)
   cmc_measured_list = [x for l in cmc_measured_list for x in l]
   
-   measured_prop_id = "{}{}".format('Measured_',task_name)
-   predicted_prop_id = "{}{}".format('Predicted_',task_name)
+  measured_prop_id = "{}{}".format('Measured_',task_name)
+  predicted_prop_id = "{}{}".format('Predicted_',task_name)
 
   
   model_measured_pred = pd.DataFrame({'smiles': train_smiles})
@@ -48,7 +48,7 @@ def GCNN_Model_Creator(dataset_file, task_name , smiles_field, epochs, batchSize
   print('Total MAE:' , round(sum(abs(model_measured_pred.Percent_Error))/len(model_measured_pred),3), '%') # Printing MAE
   return GCNN
 
-def GraphCNN_preprocess_modelPredict(dataset_file, smiles_field = "smiles", model, batchSize = 100):
+def GraphCNN_preprocess_modelPredict(dataset_file, model, smiles_field = "smiles", batchSize = 100):
   loader = dc.data.CSVLoader(tasks=["prop"],  smiles_field="smiles", featurizer=dc.feat.ConvMolFeaturizer())
   dataset = loader.featurize(dataset_file) # Featurizing the dataset with ConvMolFeaturizer
   normalizer = dc.trans.NormalizationTransformer(transform_y=True, dataset=dataset,move_mean=True)
