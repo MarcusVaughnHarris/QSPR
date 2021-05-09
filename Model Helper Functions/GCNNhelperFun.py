@@ -49,7 +49,7 @@ def GCNN_Model_Creator(dataset_file, task_name , smiles_field, epochs, batchSize
   print('Total MAE:' , round(sum(abs(model_measured_pred.Percent_Error))/len(model_measured_pred),3), '%') # Printing MAE
   return GCNN, model_measured_pred
 
-def GraphCNN_preprocess_modelPredict(dataset_file, model, task_name, smiles_field = "smiles", batchSize = 100):
+def GraphCNN_Model_Predict(dataset_file, model, task_name, smiles_field = "smiles", batchSize = 100):
   loader = dc.data.CSVLoader(tasks=["prop"],  smiles_field="smiles", featurizer=dc.feat.ConvMolFeaturizer())
   dataset = loader.featurize(dataset_file) # Featurizing the dataset with ConvMolFeaturizer
   normalizer = dc.trans.NormalizationTransformer(transform_y=True, dataset=dataset,move_mean=True)
