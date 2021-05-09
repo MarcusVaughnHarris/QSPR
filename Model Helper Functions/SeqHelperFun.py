@@ -80,7 +80,7 @@ def Seq_Model_performance(SMIdf_descr, property_id, model):   #_________________
   plt.legend(loc=4)
   plt.show()
 
-  cmc_pred = ModelPredict_SMIdf(SMIdf_descr, property_id, model ) # Predicting CMC using dataframe
+  cmc_pred = Seq_Model_Predict(SMIdf_descr, property_id, model ) # Predicting CMC using dataframe
   model_measured_pred = pd.DataFrame({'smiles': cmc_pred.smiles, # Trimming dataframe to make it easy to see
                                     'Mol': cmc_pred.Mol,  
                                     measured_prop_id: cmc_pred[property_id], 
