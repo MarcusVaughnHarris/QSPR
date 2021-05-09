@@ -56,14 +56,14 @@ def IsoForest_OutlierEstimator(GenMols, TrainMols, MaxSamples):
 
 
 def Dist2Model(GeneratedMols, TrainingMols):
-  DistSum_T, allTrainMols_T, TrainDistances = FP_Similarity_Filter(GenMols = TrainingMols ,
+  DistSum_T, allTrainMols_T, TrainMols_Dist = FP_Similarity_Filter(GenMols = TrainingMols ,
                                                                  TrainMols = TrainingMols,  
                                                                  RangeTrain2Compare = range(0,(len(TrainingMols)-1)) )
-  print('Dist Range (TrainingMols):',round(TrainDistances.Dist.min(),4), '-',round(TrainDistances.Dist.max(),4))
-  print('Dist Median (TrainingMols):' , round(TrainDistances.Dist.median(),4), '\nDist Mean (Entire set):' , round(TrainDistances.Dist.mean(),4))
-  print('Dist StDev (TrainingMols):' ,round(statistics.pstdev(TrainDistances.Dist),4))
+  print('Range of Dist (TrainMols to TrainSet):',round(TrainMols_Dist.Dist.min(),4), '-',round(TrainMols_Dist.Dist.max(),4))
+  print('Dist Median (TrainMols to TrainSet):' , round(TrainMols_Dist.Dist.median(),4), '\nDist Mean (TrainMols to TrainSet):' , round(TrainMols_Dist.Dist.mean(),4))
+  print('Dist StDev (TrainMols to TrainSet):' ,round(statistics.pstdev(TrainMols_Dist.Dist),4))
   Distsummary, allTrainingMols, GenMols_IF_Dist = FP_Similarity_Filter(GenMols = GeneratedMols, 
                                                                     TrainMols = TrainingMols, 
                                                                     RangeTrain2Compare = range(0, len(GeneratedMols))  )
-  GenMols_IF_Dist = pd.DataFrame({"smiles": GenMols_IF_Dist.smiles, "IsoForest_AD":GenMols_IF_Dist.GenMols_AD_x, "Dist2Train": GenMols_IF_Dist.Dist, "Mol":GenMols_IF_Dist.Mol })
-  return GenMols_IF_Dist
+  GenMols_IF_Dist = pd.DataFrame({"smiles": GenMols_IF_Dist.smiles, "IsoForest_AD":GenMols_IF_Dist.GenMols_AD_x, "Dist2TrainSet": GenMols_IF_Dist.Dist, "Mol":GenMols_IF_Dist.Mol })
+  return GenMols_IF_Dist, TrainMols_Dist
