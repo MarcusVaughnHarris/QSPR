@@ -25,7 +25,7 @@ def PreProcess_SMIdf(SMIdf_descr, property_id, TestSize = 0.25):
 
 
 #--------- 3. Predict property using defined model and a SMIdf_descr
-def ModelPredict_SMIdf(SMIdf_descr, property_id, model): #______________________________________________________GOOD
+def Seq_Model_Predict(SMIdf_descr, property_id, model): #______________________________________________________GOOD
   smi_t2_np_array = np.array(list(SMIdf_descr['Descriptors'])) #Convert to Numpy arrays!! (panda cant handle datasets of molecular fingerprints)
   st = StandardScaler()
   smi_t2_np_array_scaled = st.fit_transform(smi_t2_np_array) # Scale array
