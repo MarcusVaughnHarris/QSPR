@@ -121,3 +121,18 @@ def fame_transesterifications(data, Nucleophiles, return_format):
       return Smiles_products_unique
    else:
       return pd.DataFrame({'Mol':Mol_products_unique,'Smiles':Smiles_products_unique})
+
+#-------------------------------------------------------------------------------
+#4.) fame_reduction
+#-------------------------------------------------------------------------------
+def fame_reduction(molecule_list):
+    RXN = AllChem.ReactionFromSmarts('[#6:1]-[#6:2](-[#8:3])=[O:4]>>[H][#6:2](-[#6:1])-[#8:4]')# 1 component
+    all_products_tuples = tuple(RXN.RunReactants((mol,)) for mol in molecule_list) # tuple format
+    all_products = list(chain.from_iterable(chain.from_iterable(all_products_tuples))) # list format
+    try:
+      [Chem.SanitizeMol(mol) for mol in all_products] 
+    except ValueError:
+      print("One or more epoxide_to_CC5 products failed sanitization, removing empty mols.")
+    all_products_smiles = [Chem.MolToSmiles(mol, isomericSmiles=True) for mol in all_products] #list format
+    all_products_unique = [Chem.MolFromSmiles(smiles) for smiles in set(all_products_smiles)] #list format
+    return all_products_unique
