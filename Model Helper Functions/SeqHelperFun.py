@@ -111,7 +111,7 @@ def Seq_Model_performance(SMIdf_descr, property_id, model):   #_________________
 
 #--------- 4. Predict prop using SMIdf_descr and show stats for specific functional group subsets in the data
 def Seq_Model_performance_Substructure(SMIdf_descr, property_id, model, mol_substructure):   #______________________________________________________GOOD
-  cmc_pred = ModelPredict_SMIdf(SMIdf_descr, property_id, model ) # Predicting CMC using dataframe
+  cmc_pred = Seq_Model_Predict(SMIdf_descr, property_id, model ) # Predicting CMC using dataframe
 
   predicted_prop_id = "{}{}".format('Predicted_',property_id)
   measured_prop_id = "{}{}".format('Measured_',property_id) 
