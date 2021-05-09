@@ -51,3 +51,19 @@ def IsoForest_OutlierEstimator(GenMols, TrainMols, MaxSamples):
   print('# Gen Mol Outside AD:', len(outlier_pcare_test))
   GenMols['GenMols_AD'] = y_pred_test
   return GenMols
+
+#Mol distance to model (training set)
+
+
+def Dist2Model(GeneratedMols, TrainingMols):
+  DistSum_T, allTrainMols_T, TrainDistances = FP_Similarity_Filter(GenMols = TrainingMols ,
+                                                                 TrainMols = TrainingMols,  
+                                                                 RangeTrain2Compare = range(0,(len(TrainingMols)-1)) )
+  print('Dist Range (TrainingMols):',round(TrainDistances.Dist.min(),4), '-',round(TrainDistances.Dist.max(),4))
+  print('Dist Median (TrainingMols):' , round(TrainDistances.Dist.median(),4), '\nDist Mean (Entire set):' , round(TrainDistances.Dist.mean(),4))
+  print('Dist StDev (TrainingMols):' ,round(statistics.pstdev(TrainDistances.Dist),4))
+  Distsummary, allTrainingMols, GenMols_IF_Dist = FP_Similarity_Filter(GenMols = GeneratedMols, 
+                                                                    TrainMols = TrainingMols, 
+                                                                    RangeTrain2Compare = range(0, len(GeneratedMols))  )
+  GenMols_IF_Dist = pd.DataFrame({"smiles": GenMols_IF_Dist.smiles, "IsoForest_AD":GenMols_IF_Dist.GenMols_AD_x, "Dist2Train": GenMols_IF_Dist.Dist, "Mol":GenMols_IF_Dist.Mol })
+  return GenMols_IF_Dist
