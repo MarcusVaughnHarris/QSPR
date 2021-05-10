@@ -95,7 +95,7 @@ def Nuc_ring_opening(data, Nucleophiles):
   else:
         all_products_ep_unique["rxnSeq"] = ["{}{}".format(df_name, i   ) for i in all_products_ep_unique.rxnSeq]
 #____________________________________________________________________________________________________________________________________________________________
-  all_products_mols_cc5 = [epoxide_opening(data, n) for n in Nucleophiles.Mol] # Reacting FAMES
+  all_products_mols_cc5 = [CC5_opening(data, n) for n in Nucleophiles.Mol] # Reacting FAMES
   allProd_cc5 = [x for l in all_products_mols_cc5 for x in l] #Unlisting list of lists
   allProd_cc5_unlist = [x for x in allProd_cc5 if x is not None] #Removing mols that failed sanitization
   all_products_cc5_unique = pd.DataFrame({"Mol": allProd_cc5_unlist, #list format
