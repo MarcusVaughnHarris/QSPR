@@ -160,3 +160,12 @@ def fame_transesterifications(data, Nucleophiles):
    else:
         all_products_unique["rxnSeq"] = "{}{}{}".format(df_name, "_t" ,  Nucleophile_name  )
    return all_products_unique
+
+#---------------------------------------------------------------------------------------------------------------------------
+#5.) NHOH_limit (limits NH/OH functionality in dataframe, so as to prevent over-generating products and crashing the system
+#---------------------------------------------------------------------------------------------------------------------------
+def NHOH_limit(MolDF, limit_to = 4):
+ MolDF["NH_OH_Count"] = [Descriptors.NumHDonors(mol) for mol in MolDF.Mol]
+ NH_OH_lim = MolDF[MolDF.NH_OH_Count <= limit_to]
+ NHOHlimited = NH_OH_lim.drop(['NH_OH_Count'], axis=1)
+ return NHOHlimited
