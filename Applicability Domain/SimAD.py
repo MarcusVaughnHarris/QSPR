@@ -67,3 +67,19 @@ def Dist2Model(GeneratedMols, TrainingMols):
                                                                     RangeTrain2Compare = range(0, len(GeneratedMols))  )
   GenMols_IF_Dist = pd.DataFrame({"smiles": GenMols_IF_Dist.smiles, "IsoForest_AD":GenMols_IF_Dist.GenMols_AD_x, "Dist2TrainSet": GenMols_IF_Dist.Dist, "Mol":GenMols_IF_Dist.Mol })
   return GenMols_IF_Dist, TrainMols_Dist
+
+
+def Dist2Model_APfp(GenMols, trainDF):
+  pairFps_train = [Pairs.GetAtomPairFingerprint(x) for x in trainDF.Mol]
+  pairFps_gen = [Pairs.GetAtomPairFingerprint(x) for x in GenMols.Mol]
+  
+  def avg_dists(GenMols, trainDF, pairFps_gen, pairFps_train, x):
+    n_list = [x] * len(GenMols)
+    ZIPcompare = itertools.zip_longest(range(0, len(GenMols)),  n_list)
+    dists = [DataStructs.DiceSimilarity(pairFps_gen[n1],pairFps_train[n2])for n1, n2 in ZIPcompare]
+    avg_dist = sum(dists)/ len(dists)
+    return avg_dist
+
+  train_set_range = range(0, len(trainDF)-1)
+  averages = [avg_dists(GenMols, trainDF, pairFps_gen, pairFps_train, x) for x in train_set_range]
+  return averages
