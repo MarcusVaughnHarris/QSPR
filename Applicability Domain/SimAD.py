@@ -74,7 +74,7 @@ def Dist2Model_APfp(GenMols, trainDF):
   pairFps_gen = [Pairs.GetAtomPairFingerprint(x) for x in GenMols.Mol]
   
   def avg_dists(GenMols, trainDF, pairFps_gen, pairFps_train, x):
-    n_list = [x] * len(GenMols)
+    n_list = [x] * len(trainDF)
     ZIPcompare = itertools.zip_longest(range(0, len(GenMols)),  n_list)
     dists = [DataStructs.DiceSimilarity(pairFps_gen[n1],pairFps_train[n2])for n1, n2 in ZIPcompare]
     avg_dist = sum(dists)/ len(dists)
