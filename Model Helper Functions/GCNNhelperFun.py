@@ -49,20 +49,22 @@ def GCNN_Model_Creator(dataset_file, task_name , smiles_field, epochs, batchSize
   print('Total MAE:' , round(sum(abs(model_measured_pred.Percent_Error))/len(model_measured_pred),3), '%') # Printing MAE
   return GCNN, model_measured_pred
 
-def GraphCNN_Model_Predict(dataset_file, model, task_name, smiles_field = "smiles", batchSize = 100):
-  loader = dc.data.CSVLoader(tasks=["prop"],  smiles_field="smiles", featurizer=dc.feat.ConvMolFeaturizer())
+def GraphCNN_Model_Predict(dataset_file, model, task_name, smiles_field = "smiles"):
+  loader = dc.data.CSVLoader(tasks=[task_name],  smiles_field="smiles", featurizer=dc.feat.ConvMolFeaturizer())
   dataset = loader.featurize(dataset_file) # Featurizing the dataset with ConvMolFeaturizer
   normalizer = dc.trans.NormalizationTransformer(transform_y=True, dataset=dataset,move_mean=True)
   struc_data = normalizer.transform(dataset)
-  cmc_pred = model.predict_on_batch(struc_data.X[:batchSize])
+  cmc_pred = model.predict_on_batch(struc_data.X)
   cmc_pred= normalizer.untransform(cmc_pred)
   cmc_pred_list = [x for l in cmc_pred for x in l]
   
   predicted_prop_id = "{}{}".format('Predicted_',task_name)
 
-  train_smiles = list(struc_data.ids[:batchSize])
+  train_smiles = list(struc_data.ids)
+  len(train_smiles)
   model_measured_pred = pd.DataFrame({'smiles': train_smiles})
   model_measured_pred[predicted_prop_id] = cmc_pred_list #Adding predicted CMC to original Dataframe
 
   model_measured_pred[predicted_prop_id] = round(model_measured_pred[predicted_prop_id], 3)
   return model_measured_pred
+
