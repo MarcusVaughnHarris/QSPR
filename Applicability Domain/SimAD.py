@@ -47,9 +47,9 @@ def IsoForest_OutlierEstimator(GenMols, TrainMols, MaxSamples):
   plt.xlim((-5, 5))
   plt.ylim((-5, 5))
   plt.legend([b1, b2,c],["Training Observations","Gen Mols Within AD", "Gen Mol Outside AD",],loc="upper left")
-  print('# Gen Mols Within AD:', len(inline_pcare_test))
-  print('# Gen Mol Outside AD:', len(outlier_pcare_test))
   GenMols['GenMols_AD'] = y_pred_test
+  print('\n\n# Gen Mols Within AD:', len(inline_pcare_test))
+  print('# Gen Mol Outside AD:', len(outlier_pcare_test),'\n\n')
   return GenMols
 
 #Mol distance to model (training set)
