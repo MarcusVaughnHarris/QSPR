@@ -32,7 +32,7 @@ def Seq_Model_Predict(SMIdf_descr, property_id, model): #_______________________
   smi_t2_predicted_array = model.predict(smi_t2_np_array_scaled) # Predict using
   smi_t2_predicted = [x for l in smi_t2_predicted_array for x in l] #Unlisting list of lists
   
-  predicted_prop_id = "{}{}".format('Predicted_',property_id)
+  predicted_prop_id = "{}{}".format('Seq_',property_id)
   
   SMIdf_descr[predicted_prop_id] = smi_t2_predicted #Adding predicted CMC to original Dataframe
   return SMIdf_descr
