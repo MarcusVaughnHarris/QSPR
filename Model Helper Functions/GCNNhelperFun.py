@@ -65,3 +65,32 @@ def GraphCNN_Model_Predict(dataset_file, model, task_name, smiles_field = "smile
 
   model_measured_pred[predicted_prop_id] = round(model_measured_pred[predicted_prop_id], 3)
   return model_measured_pred
+
+
+#_________________________________________________________________________________________________________________________ 
+
+def GraphCNN_Model_Predict_2(dataset,  training_dataset, model, task_name, smiles_field = "smiles"):
+
+  dataset[task_name]= (np.random.rand( dataset.shape[0]))*max(training_dataset[task_name])
+  dataset.to_csv('/content/GM_TopSim.csv')
+  dataset_file = '/content/GM_TopSim.csv'
+
+  loader = dc.data.CSVLoader(tasks=[task_name],  smiles_field="smiles", featurizer=dc.feat.ConvMolFeaturizer())
+  data = loader.featurize(dataset_file) # Featurizing the dataset with ConvMolFeaturizer
+  normalizer = dc.trans.NormalizationTransformer(transform_y=True, dataset=data,move_mean=True)
+  struc_data = normalizer.transform(data)
+  cmc_pred = model.predict_on_batch(struc_data.X)
+  cmc_pred= normalizer.untransform(cmc_pred)
+  cmc_pred_list = [x for l in cmc_pred for x in l]
+  
+  predicted_prop_id = "{}{}".format('GCNN_',task_name)
+
+  train_smiles = list(struc_data.ids)
+  len(train_smiles)
+  model_measured_pred = pd.DataFrame({'smiles': train_smiles})
+  model_measured_pred[predicted_prop_id] = cmc_pred_list #Adding predicted CMC to original Dataframe
+
+  model_measured_pred[predicted_prop_id] = round(model_measured_pred[predicted_prop_id], 3)
+
+  GenMols_pred = dataset.merge(model_measured_pred, left_on='smiles', right_on='smiles')#____________________________________________ Merge model predictions
+  return GenMols_pred
