@@ -47,7 +47,7 @@ def Seq_Model_performance(SMIdf_descr, property_id, model):   #_________________
                                                                                         property_id = property_id, 
                                                                                         TestSize = 0.25)
   
-  predicted_prop_id = "{}{}".format('Predicted_',property_id)
+  predicted_prop_id = "{}{}".format('Seq_',property_id)
   measured_prop_id = "{}{}".format('Measured_',property_id) 
 
 
@@ -113,7 +113,7 @@ def Seq_Model_performance(SMIdf_descr, property_id, model):   #_________________
 def Seq_Model_performance_Substructure(SMIdf_descr, property_id, model, mol_substructure):   #______________________________________________________GOOD
   cmc_pred = Seq_Model_Predict(SMIdf_descr, property_id, model ) # Predicting CMC using dataframe
 
-  predicted_prop_id = "{}{}".format('Predicted_',property_id)
+  predicted_prop_id = "{}{}".format('Seq_',property_id)
   measured_prop_id = "{}{}".format('Measured_',property_id) 
 
   model_measured_pred = pd.DataFrame({'smiles': cmc_pred.smiles, # Trimming dataframe to make it easy to see
