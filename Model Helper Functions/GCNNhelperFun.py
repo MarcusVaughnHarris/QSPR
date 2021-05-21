@@ -21,7 +21,7 @@ def GCNN_Model_Creator(dataset_file, task_name , smiles_field, epochs, batchSize
   # Predicted values for entire dataset
   cmc_pred = GCNN.predict_on_batch(struc_data.X)
   train_smiles = list(struc_data.ids)
-  predicted_prop_id = "{}{}".format('Predicted_',task_name)
+  predicted_prop_id = "{}{}".format('GCNN_',task_name)
   measured_prop_id = "{}{}".format('Measured_',task_name)
   model_measured_pred = pd.DataFrame({'smiles': train_smiles, 
                                       measured_prop_id: [x for l in normalizer.untransform(struc_data.y) for x in l], 
@@ -56,7 +56,7 @@ def GraphCNN_Model_Predict(dataset_file, model, task_name, smiles_field = "smile
   cmc_pred= normalizer.untransform(cmc_pred)
   cmc_pred_list = [x for l in cmc_pred for x in l]
   
-  predicted_prop_id = "{}{}".format('Predicted_',task_name)
+  predicted_prop_id = "{}{}".format('GCNN_',task_name)
 
   train_smiles = list(struc_data.ids)
   len(train_smiles)
