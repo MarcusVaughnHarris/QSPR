@@ -74,7 +74,7 @@ def GraphCNN_Model_Predict_v1(dataset,  training_dataset, model, task_name, smil
   model_measured_pred[predicted_prop_id] = round(model_measured_pred[predicted_prop_id], 3)
 
   GenMols_pred = dataset.merge(model_measured_pred, left_on='smiles', right_on='smiles')#____________________________________________ Merge model predictions
-  return 
+  return GenMols_pred
 
 def GraphCNN_Model_Predict(dataset,  training_dataset, model, task_name, smiles_field = "smiles"):
 
