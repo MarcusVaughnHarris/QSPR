@@ -50,7 +50,7 @@ def GCNN_Model_Creator(dataset_file, task_name , smiles_field, epochs, batchSize
 
 #_________________________________________________________________________________________________________________________ 
 
-def GraphCNN_Model_Predict(dataset,  training_dataset, model, task_name, smiles_field = "smiles"):
+def GraphCNN_Model_Predict_v1(dataset,  training_dataset, model, task_name, smiles_field = "smiles"):
 
   dataset[task_name]= (np.random.rand( dataset.shape[0]))*max(training_dataset[task_name])
   dataset.to_csv('/content/GM_TopSim.csv')
@@ -74,7 +74,9 @@ def GraphCNN_Model_Predict(dataset,  training_dataset, model, task_name, smiles_
   model_measured_pred[predicted_prop_id] = round(model_measured_pred[predicted_prop_id], 3)
 
   GenMols_pred = dataset.merge(model_measured_pred, left_on='smiles', right_on='smiles')#____________________________________________ Merge model predictions
-  return def GraphCNN_Model_Predict_2(dataset,  training_dataset, model, task_name, smiles_field = "smiles"):
+  return 
+
+def GraphCNN_Model_Predict(dataset,  training_dataset, model, task_name, smiles_field = "smiles"):
 
   dataset[task_name]= (np.random.rand( dataset.shape[0]))*max(training_dataset[task_name])
   dataset.to_csv('/content/GM_TopSim.csv')
